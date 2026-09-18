@@ -1,5 +1,8 @@
 # Mafia Party Game — starter Android project
 
+This app is a way of playing the card game Mafia, without pushing one
+player out of the game to be the host.
+
 A minimal, working implementation of the local WiFi/Hotspot Mafia game:
 Mafia (Don), Doctor (Munna Bhai), Cop (Chulbul Pandey), everyone else
 Villager (Majdoor). One phone hosts and narrates via text-to-speech; the
