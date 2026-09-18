@@ -1,5 +1,10 @@
 # Mafia Party Game — starter Android project
 
+![License: MIT](https://img.shields.io/badge/license-MIT-D4AF37.svg)
+![Platform: Android](https://img.shields.io/badge/platform-Android-3DDC84.svg)
+![Min SDK 23](https://img.shields.io/badge/minSdk-23-D7263D.svg)
+![Kotlin](https://img.shields.io/badge/language-Kotlin-7F52FF.svg)
+
 This app is a way of playing the card game Mafia, without pushing one
 player out of the game to be the host.
 
