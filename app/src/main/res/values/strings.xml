@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mafia Game</string>
+
+    <string-array name="loading_punchlines">
+        <item>Mafia Murdered, Time for Revenge.</item>
+        <item>Villagers Getting Smarter — Level Up Your Game.</item>
+        <item>Trust No One. Not Even Your Best Friend.</item>
+        <item>The Town Sleeps. The Mafia Doesn\'t.</item>
+        <item>One Wrong Vote Could Cost You Everything.</item>
+        <item>Loyalty Is A Myth In This Town.</item>
+        <item>Every Shadow Hides A Secret.</item>
+        <item>The Don Never Reveals His Hand.</item>
+        <item>Silence Is The Villager\'s Only Weapon.</item>
+        <item>Lies Are Currency After Dark.</item>
+        <item>Somebody Here Isn\'t Who They Say They Are.</item>
+        <item>The Night Has Rules. Breaking Them Costs Lives.</item>
+    </string-array>
+
+    <string-array name="waiting_punchlines">
+        <item>Someone at this table is lying…</item>
+        <item>Keep your eyes closed. Or don\'t.</item>
+        <item>The night is watching.</item>
+        <item>Patience. The Don is thinking.</item>
+        <item>Trust is expensive here.</item>
+        <item>Every second of silence hides a decision.</item>
+        <item>Whispers travel faster than truth.</item>
+        <item>Someone\'s fate is being decided right now.</item>
+    </string-array>
+
+    <string-array name="lobby_punchlines">
+        <item>Gathering the suspects…</item>
+        <item>Every town needs a Don. And a fool who trusts him.</item>
+        <item>Choose your allies carefully. Or don\'t choose at all.</item>
+        <item>The table is set. The knives are sharpening.</item>
+        <item>Not everyone here will see the sunrise.</item>
+    </string-array>
+</resources>

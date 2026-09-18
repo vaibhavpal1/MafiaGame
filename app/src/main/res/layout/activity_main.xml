@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="28dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎭"
+        android:textSize="56sp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAFIA"
+        style="@style/Mafia.Title"
+        android:textSize="40sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRUST NO ONE"
+        style="@style/Mafia.Subtitle"
+        android:layout_marginBottom="40dp"/>
+
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Your name"
+        style="@style/Mafia.EditText"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/hostButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Host Game"
+        style="@style/Mafia.Button"/>
+
+    <Button
+        android:id="@+id/joinButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Join Game"
+        style="@style/Mafia.Button.Gold"/>
+
+</LinearLayout>

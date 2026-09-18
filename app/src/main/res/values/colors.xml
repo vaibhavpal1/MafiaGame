@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core noir palette -->
+    <color name="black">#0A0708</color>
+    <color name="black_surface">#171213</color>
+    <color name="black_surface_light">#221A1C</color>
+    <color name="red_primary">#D7263D</color>
+    <color name="red_bright">#FF3B4E</color>
+    <color name="red_dark">#5C0A16</color>
+    <color name="gold">#D4AF37</color>
+    <color name="gold_soft">#E8CD7A</color>
+    <color name="text_primary">#F5EFE6</color>
+    <color name="text_secondary">#B7A9A2</color>
+    <color name="text_muted">#8A7A75</color>
+    <color name="scrim">#DD0A0708</color>
+
+    <!-- Role: Don (Mafia) -->
+    <color name="don_top">#1A0000</color>
+    <color name="don_bottom">#7A0C1E</color>
+    <color name="don_border">#D4AF37</color>
+    <color name="don_text">#F5EFE6</color>
+
+    <!-- Role: Doctor -->
+    <color name="doctor_top">#04181A</color>
+    <color name="doctor_bottom">#0E5C63</color>
+    <color name="doctor_border">#7FE7D1</color>
+    <color name="doctor_text">#EAFBF8</color>
+
+    <!-- Role: Cop -->
+    <color name="cop_top">#050813</color>
+    <color name="cop_bottom">#1B3A6B</color>
+    <color name="cop_border">#9FB8D9</color>
+    <color name="cop_text">#EAF1FB</color>
+
+    <!-- Role: Villager -->
+    <color name="villager_top">#191106</color>
+    <color name="villager_bottom">#6B4A21</color>
+    <color name="villager_border">#C98A3B</color>
+    <color name="villager_text">#FBF2E3</color>
+</resources>

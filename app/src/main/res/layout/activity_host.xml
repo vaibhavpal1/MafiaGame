@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎭 THE TABLE IS SET"
+        style="@style/Mafia.Title"
+        android:textSize="24sp"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/hostFlavorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Mafia.Subtitle"
+        android:textStyle="italic"
+        android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_panel_dark"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/lobbyListText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Waiting for players…"
+            style="@style/Mafia.Body"
+            android:lineSpacingExtra="4dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/discussionMinutesLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Discussion time (minutes)"
+        style="@style/Mafia.Subtitle"
+        android:layout_marginBottom="6dp"/>
+
+    <EditText
+        android:id="@+id/discussionMinutesInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Discussion time (minutes)"
+        android:inputType="number"
+        android:text="3"
+        style="@style/Mafia.EditText"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/hostTimerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:textColor="@color/gold"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:fontFamily="serif"
+        android:background="@drawable/bg_timer_pill"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Begin the Night"
+        style="@style/Mafia.Button"/>
+
+</LinearLayout>
+</ScrollView>
