@@ -26,6 +26,7 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var hostEndpointId: String
     private var myRole: String = "MAJDOOR"
     private var countdownTimer: CountDownTimer? = null
+    private var pendingOverlayDismissAction: () -> Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,7 @@ class PlayerActivity : AppCompatActivity() {
         roleTaglineText = findViewById(R.id.roleTaglineText)
 
         findViewById<Button>(R.id.enterTownButton).setOnClickListener {
-            dismissRoleReveal()
+            dismissOverlayCard()
         }
 
         val myName = intent.getStringExtra("PLAYER_NAME") ?: "Player"
@@ -64,6 +65,13 @@ class PlayerActivity : AppCompatActivity() {
                 "ROLE_ASSIGN" -> {
                     myRole = json.getString("role")
                     showRoleReveal(myRole)
+                }
+                "ALLY_REVEAL" -> {
+                    showAllyReveal(
+                        json.getString("title"),
+                        json.getString("subtitle"),
+                        json.getString("tagline")
+                    )
                 }
                 "PHASE_UPDATE" -> {
                     stopCountdown()
@@ -173,16 +181,58 @@ class PlayerActivity : AppCompatActivity() {
     /** Populates and reveals the themed role card handed to the player. */
     private fun showRoleReveal(roleName: String) {
         val info = RoleUi.forRoleName(roleName)
-        roleEmoji.text = info.emoji
-        roleTitleText.text = info.title
-        roleTitleText.setTextColor(getColor(info.accentColorRes))
-        roleSubtitleText.text = info.subtitle
-        roleTaglineText.text = info.tagline
-        roleCardPanel.setBackgroundResource(info.cardBackgroundRes)
-
         roleBadge.text = "${info.emoji}  ${info.title}"
         roleBadge.setTextColor(getColor(info.accentColorRes))
         roleBadge.visibility = android.view.View.VISIBLE
+
+        showOverlayCard(
+            emoji = info.emoji,
+            title = info.title,
+            subtitle = info.subtitle,
+            tagline = info.tagline,
+            backgroundRes = info.cardBackgroundRes,
+            accentColorRes = info.accentColorRes,
+            buttonText = "Enter the Town",
+            onDismiss = { statusText.text = "Waiting for the host to begin the night..." }
+        )
+    }
+
+    /**
+     * Shown once, on night 1, privately to the Don and the Right Hand so
+     * they recognize their secret partner. Reuses the same card mechanics
+     * as [showRoleReveal] with the Right Hand's purple "alliance" theme.
+     */
+    private fun showAllyReveal(title: String, subtitle: String, tagline: String) {
+        showOverlayCard(
+            emoji = "🤝",
+            title = title,
+            subtitle = subtitle,
+            tagline = tagline,
+            backgroundRes = R.drawable.card_role_right_hand,
+            accentColorRes = R.color.right_hand_border,
+            buttonText = "I Understand",
+            onDismiss = {}
+        )
+    }
+
+    private fun showOverlayCard(
+        emoji: String,
+        title: String,
+        subtitle: String,
+        tagline: String,
+        backgroundRes: Int,
+        accentColorRes: Int,
+        buttonText: String,
+        onDismiss: () -> Unit
+    ) {
+        roleEmoji.text = emoji
+        roleTitleText.text = title
+        roleTitleText.setTextColor(getColor(accentColorRes))
+        roleSubtitleText.text = subtitle
+        roleTaglineText.text = tagline
+        roleCardPanel.setBackgroundResource(backgroundRes)
+        findViewById<Button>(R.id.enterTownButton).text = buttonText
+        pendingOverlayDismissAction = onDismiss
 
         roleRevealOverlay.alpha = 0f
         roleRevealOverlay.visibility = android.view.View.VISIBLE
@@ -196,11 +246,12 @@ class PlayerActivity : AppCompatActivity() {
             .start()
     }
 
-    private fun dismissRoleReveal() {
+    private fun dismissOverlayCard() {
         roleRevealOverlay.animate().alpha(0f).setDuration(200).withEndAction {
             roleRevealOverlay.visibility = android.view.View.GONE
         }.start()
-        statusText.text = "Waiting for the host to begin the night..."
+        pendingOverlayDismissAction()
+        pendingOverlayDismissAction = {}
     }
 
     private fun actionPrompt(actionFor: String) = when (actionFor) {

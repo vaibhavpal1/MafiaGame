@@ -11,9 +11,27 @@ player out of the game to be the host.
 
 A minimal, working implementation of the local WiFi/Hotspot Mafia game:
 Mafia (Don), Doctor (Munna Bhai), Cop (Chulbul Pandey), everyone else
-Villager (Majdoor). One phone hosts and narrates via text-to-speech; the
-rest connect as players over Nearby Connections (WiFi/Hotspot/Bluetooth,
-handled automatically by Google's API).
+Villager (Majdoor) — plus a secret Right Hand once 7+ players join. One
+phone hosts and narrates via text-to-speech; the rest connect as players
+over Nearby Connections (WiFi/Hotspot/Bluetooth, handled automatically
+by Google's API).
+
+### The Right Hand (7+ players only)
+
+A hidden fifth role that's secretly loyal to the Don:
+
+- On night 1, the Don and the Right Hand privately learn who each other
+  are — nobody else ever finds out.
+- The Right Hand plays every day exactly like a villager: joins
+  discussion, votes, and quietly steers blame away from the Don.
+- He never acts at night while the real Don is alive, and wins only if
+  the Mafia side wins.
+- If the town votes out the Don while the Right Hand is still alive, the
+  Right Hand secretly takes over as Don. The very next night is a free
+  pass for the town (nobody dies, since the family has no killer that
+  night) — but from the night after that, the Right Hand kills as the
+  new Don, and the game continues until he's caught or the Mafia side
+  wins outright.
 
 ## How to open it
 
@@ -55,6 +73,10 @@ Before testing, on every phone:
   on the host.
 - Win check (Mafia caught → villagers win; Mafia ≥ everyone else →
   mafia wins) that loops back into another night if neither is true.
+- Right Hand role (7+ players): mutual reveal with the Don on night 1,
+  a one-night "no kill" grace period and secret promotion to Don if the
+  original Don is voted out, and win-condition parity that counts him
+  as mafia-aligned throughout.
 
 ## Known limitations / what to harden next
 

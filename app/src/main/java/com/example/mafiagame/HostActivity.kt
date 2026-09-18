@@ -31,6 +31,11 @@ class HostActivity : AppCompatActivity() {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var discussionSeconds = 180
     private var gameStarted = false
+    private var nightNumber = 0
+    // Set when the Don is voted out while a Right Hand is still alive: the
+    // Right Hand takes over as Don, but not until the night after next —
+    // see promoteRightHandToDon() and the comment in gameLoop().
+    private var donDiedAwaitingPromotion = false
 
     // Set while we are waiting on exactly one specific role's tap.
     private var waitingForRole: Role? = null
@@ -138,37 +143,106 @@ class HostActivity : AppCompatActivity() {
         shuffled[0].role = Role.DON
         shuffled[1].role = Role.MUNNA_BHAI
         shuffled[2].role = Role.CHULBUL_PANDEY
-        for (i in 3 until shuffled.size) shuffled[i].role = Role.MAJDOOR
+        var nextIndex = 3
+        if (shuffled.size > 6) {
+            // Only worth including once there are enough villagers left over
+            // for the Right Hand's cover story to actually work.
+            shuffled[3].role = Role.RIGHT_HAND
+            nextIndex = 4
+        }
+        for (i in nextIndex until shuffled.size) shuffled[i].role = Role.MAJDOOR
 
         players.forEach { nearby.send(it.endpointId, Protocol.roleAssign(it.role)) }
         scope.launch { gameLoop() }
+    }
+
+    private fun isMafiaAligned(player: Player) = player.role == Role.DON || player.role == Role.RIGHT_HAND
+
+    /**
+     * Checks the standard Mafia win conditions (nobody mafia-aligned left ->
+     * villagers win; mafia-aligned count at or above everyone else -> mafia
+     * win) and announces + ends the game if either is met. A living Right
+     * Hand counts as mafia-aligned even before he's literally promoted to
+     * Don, so the town can't win just by lynching the original Don.
+     */
+    private fun checkWinConditionsOrContinue(): Boolean {
+        val alive = players.filter { it.isAlive }
+        val aliveMafia = alive.filter { isMafiaAligned(it) }
+        if (aliveMafia.isEmpty()) { announceWinner("Villagers"); return false }
+        if (aliveMafia.size >= alive.size - aliveMafia.size) { announceWinner("Mafia"); return false }
+        return true
     }
 
     private suspend fun gameLoop() {
         while (true) {
             nightPhase()
 
-            val don = players.find { it.role == Role.DON }
-            if (don == null || !don.isAlive) { announceWinner("Villagers"); return }
+            // The night just resolved with no living Don (because he was
+            // voted out yesterday) — that's the "grace night" the Right
+            // Hand's cover buys the town. Promote him now, after the fact,
+            // so it's only from the *next* night that he can act as Don.
+            if (donDiedAwaitingPromotion) {
+                promoteRightHandToDon()
+                donDiedAwaitingPromotion = false
+            }
 
-            val alive = players.filter { it.isAlive }
-            val mafiaCount = alive.count { it.role == Role.DON }
-            if (mafiaCount >= alive.size - mafiaCount) { announceWinner("Mafia"); return }
+            if (!checkWinConditionsOrContinue()) return
 
             val eliminated = dayPhase()
-            if (eliminated?.role == Role.DON) { announceWinner("Villagers"); return }
+            if (eliminated?.role == Role.DON) {
+                val rightHand = players.find { it.role == Role.RIGHT_HAND && it.isAlive }
+                if (rightHand != null) {
+                    donDiedAwaitingPromotion = true
+                    speak("The Don has fallen. But the family is not finished yet.")
+                }
+            }
 
-            val aliveAfterVote = players.filter { it.isAlive }
-            val mafiaAfterVote = aliveAfterVote.count { it.role == Role.DON }
-            if (mafiaAfterVote == 0) { announceWinner("Villagers"); return }
-            if (mafiaAfterVote >= aliveAfterVote.size - mafiaAfterVote) { announceWinner("Mafia"); return }
+            if (!checkWinConditionsOrContinue()) return
         }
     }
 
+    /** Hands the Don role to the surviving Right Hand so he can act as killer from here on. */
+    private fun promoteRightHandToDon() {
+        val rightHand = players.find { it.role == Role.RIGHT_HAND && it.isAlive } ?: return
+        rightHand.role = Role.DON
+        speak("${rightHand.name} steps out of the shadows to lead the family.")
+        nearby.send(rightHand.endpointId, Protocol.roleAssign(Role.DON))
+    }
+
+    /**
+     * Night 1 only: the Don and the Right Hand privately learn who each
+     * other are. The Right Hand doesn't act tonight (or any night the real
+     * Don is alive) — this is purely so he knows who to protect and mislead
+     * the town on the Don's behalf during discussion.
+     */
+    private fun revealAllyPairing() {
+        val don = players.find { it.role == Role.DON } ?: return
+        val rightHand = players.find { it.role == Role.RIGHT_HAND } ?: return
+        nearby.send(
+            don.endpointId,
+            Protocol.allyReveal(
+                title = "YOUR RIGHT HAND",
+                subtitle = "${rightHand.name} secretly serves the family",
+                tagline = "Trust them. They will never turn on you."
+            )
+        )
+        nearby.send(
+            rightHand.endpointId,
+            Protocol.allyReveal(
+                title = "YOUR DON",
+                subtitle = "${don.name} leads the family",
+                tagline = "Protect them. Mislead the town. Survive."
+            )
+        )
+    }
+
     private suspend fun nightPhase() {
+        nightNumber++
         speak("It's night in the town. Everyone close their eyes.")
         nearby.sendToAll(Protocol.phaseUpdate("Everyone is asleep..."))
         delay(3000)
+
+        if (nightNumber == 1) revealAllyPairing()
 
         val killTarget = askRole(Role.DON, "Mafia, wake up and choose someone to kill.")
         delay(5000)

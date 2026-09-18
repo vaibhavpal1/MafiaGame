@@ -14,6 +14,16 @@ object Protocol {
         JSONObject().put("type", "ROLE_ASSIGN").put("role", role.name)
             .toString().toByteArray()
 
+    // Sent once, on night 1, privately to the Don and the Right Hand so they
+    // recognize each other. Every field is pre-formatted by the host so
+    // PlayerActivity doesn't need to know who's who.
+    fun allyReveal(title: String, subtitle: String, tagline: String): ByteArray =
+        JSONObject().put("type", "ALLY_REVEAL")
+            .put("title", title)
+            .put("subtitle", subtitle)
+            .put("tagline", tagline)
+            .toString().toByteArray()
+
     fun phaseUpdate(message: String): ByteArray =
         JSONObject().put("type", "PHASE_UPDATE").put("message", message)
             .toString().toByteArray()

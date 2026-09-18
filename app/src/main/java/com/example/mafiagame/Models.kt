@@ -1,6 +1,6 @@
 package com.example.mafiagame
 
-enum class Role { DON, MUNNA_BHAI, CHULBUL_PANDEY, MAJDOOR }
+enum class Role { DON, MUNNA_BHAI, CHULBUL_PANDEY, RIGHT_HAND, MAJDOOR }
 
 enum class GamePhase {
     LOBBY, NIGHT_INTRO, MAFIA_TURN, DOCTOR_TURN, COP_TURN,

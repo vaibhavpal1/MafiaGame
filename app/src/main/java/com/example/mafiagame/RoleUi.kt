@@ -41,6 +41,14 @@ object RoleUi {
             cardBackgroundRes = R.drawable.card_role_cop,
             accentColorRes = R.color.cop_border
         ),
+        Role.RIGHT_HAND to RoleCardInfo(
+            emoji = "👻",
+            title = "YOU ARE THE RIGHT HAND",
+            subtitle = "Secret Ally of the Don",
+            tagline = "Survive in silence. The Don's fall is your rise.",
+            cardBackgroundRes = R.drawable.card_role_right_hand,
+            accentColorRes = R.color.right_hand_border
+        ),
         Role.MAJDOOR to RoleCardInfo(
             emoji = "🧑‍🌾",
             title = "YOU ARE A VILLAGER",

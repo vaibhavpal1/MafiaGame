@@ -37,4 +37,10 @@
     <color name="villager_bottom">#6B4A21</color>
     <color name="villager_border">#C98A3B</color>
     <color name="villager_text">#FBF2E3</color>
+
+    <!-- Role: Right Hand (secret mafia ally) -->
+    <color name="right_hand_top">#170821</color>
+    <color name="right_hand_bottom">#4B1D6B</color>
+    <color name="right_hand_border">#C9A6E0</color>
+    <color name="right_hand_text">#F3E8FB</color>
 </resources>
